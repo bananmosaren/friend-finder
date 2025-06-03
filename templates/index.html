@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Frind Finder Map!</title>
-    <meta property="og:description" content="Find friends like never before!" />
+    <title>Friend Finder</title>
+    <meta property="og:description" content="The best site ever for finding new friends on the internet!" />
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/x-icon" href="static/media/favicon.ico">
+	
     <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.5.0/dist/maplibre-gl.css' />
     <script src='https://unpkg.com/maplibre-gl@5.5.0/dist/maplibre-gl.js'></script>
+	
     <style>
         body { margin: 0; padding: 0; }
-        html, body, #map { height: 100%; }
+        html, body, #map { height: 88%; }
     </style>
 </head>
 <body>
+	<header>
+		<div class="container">
+			<div id="connection">
+				<h2>Connected from:</h2>
+				<h3 id="ip">{{ ip }}</h3>
+			</div>
+			<div id="brand">
+				<h1>Friend Finder Map</h1>
+				<p>The best site ever for finding new friends on the internet!</p>
+			</div>
+			<video autoplay="true" id="videoElement"></video>
+			<script src="static/scripts/index.js"></script>
+			<link rel='stylesheet' href='static/style/index.css' />
+		</div>
+	</header>
 	<div id="map"></div>
 	<script src="static/scripts/map.js"></script>
+	<footer>
+		<p>Swedish Quality Since 2025 🇸🇪</p>
+	</footer>
 </body>
 </html>

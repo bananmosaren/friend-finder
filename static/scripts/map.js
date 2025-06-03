@@ -1,71 +1,70 @@
-const map = (window.map = new maplibregl.Map({
+const MAPTILER_KEY = 'get_your_own_OpIi9ZULNHzrESv6T2vL';
+const map = new maplibregl.Map({
+    style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
+    center: [-74.0066, 40.7135],
+    zoom: 15.5,
+    pitch: 45,
+    bearing: -17.6,
     container: 'map',
-    zoom: 12,
-    center: [11.39085, 47.27574],
-    pitch: 70,
-    hash: true,
-    style: {
-        version: 8,
-        sources: {
-            osm: {
-                type: 'raster',
-                tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-                tileSize: 256,
-                attribution: '&copy; OpenStreetMap Contributors',
-                maxzoom: 19
-            },
-            // Use a different source for terrain and hillshade layers, to improve render quality
-            terrainSource: {
-                type: 'raster-dem',
-                url: 'https://demotiles.maplibre.org/terrain-tiles/tiles.json',
-                tileSize: 256
-            },
-            hillshadeSource: {
-                type: 'raster-dem',
-                url: 'https://demotiles.maplibre.org/terrain-tiles/tiles.json',
-                tileSize: 256
+    canvasContextAttributes: {antialias: true}
+});
+
+map.on('load', () => {
+    const layers = map.getStyle().layers;
+
+    let labelLayerId;
+    for (let i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+            labelLayerId = layers[i].id;
+            break;
+        }
+    }
+
+    map.addSource('openmaptiles', {
+        url: `https://api.maptiler.com/tiles/v3/tiles.json?key=${MAPTILER_KEY}`,
+        type: 'vector',
+    });
+
+    map.addLayer(
+        {
+            'id': '3d-buildings',
+            'source': 'openmaptiles',
+            'source-layer': 'building',
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'filter': ['!=', ['get', 'hide_3d'], true],
+            'paint': {
+                'fill-extrusion-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'render_height'], 0, 'lightgray', 200, 'royalblue', 400, 'lightblue'
+                ],
+                'fill-extrusion-height': [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    15,
+                    0,
+                    16,
+                    ['get', 'render_height']
+                ],
+                'fill-extrusion-base': ['case',
+                    ['>=', ['get', 'zoom'], 16],
+                    ['get', 'render_min_height'], 0
+                ]
             }
         },
-        layers: [
-            {
-                id: 'osm',
-                type: 'raster',
-                source: 'osm'
-            },
-            {
-                id: 'hills',
-                type: 'hillshade',
-                source: 'hillshadeSource',
-                layout: {visibility: 'visible'},
-                paint: {'hillshade-shadow-color': '#473B24'}
-            }
-        ],
-        terrain: {
-            source: 'terrainSource',
-            exaggeration: 1
-        },
-        sky: {}
-    },
-    maxZoom: 18,
-    maxPitch: 85
+        labelLayerId
+    );
+});
+
+map.addControl(new maplibregl.NavigationControl({
+    visualizePitch: true,
+    visualizeRoll: true,
+    showZoom: true,
+    showCompass: true
 }));
 
-map.addControl(
-    new maplibregl.NavigationControl({
-        visualizePitch: true,
-        showZoom: true,
-        showCompass: true
-    })
-);
-
-map.addControl(
-    new maplibregl.TerrainControl({
-        source: 'terrainSource',
-        exaggeration: 1
-    })
-);
-
-// Add geolocate control to the map.
 map.addControl(
     new maplibregl.GeolocateControl({
         positionOptions: {
@@ -74,3 +73,8 @@ map.addControl(
         trackUserLocation: true
     })
 );
+
+GeolocateControl.on('geolocate', (e) => {
+	const lng = ecoords.longitude;
+	const lat = ecoords.latitude;
+});

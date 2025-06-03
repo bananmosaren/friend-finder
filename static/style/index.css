@@ -1,0 +1,34 @@
+body {
+	background-color: #181a1b;
+	color: MistyRose;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+#connection {
+	display: flex;
+	flex-direction: column;
+	justify-self: left;
+}
+
+#brand {
+	display: flex;
+	flex-direction: column;
+	justify-self: center;
+	text-align: center;
+}
+
+#brand h1 {
+	color: Blue;
+}
+
+#videoElement {
+	display: flex;
+	justify-self: right;
+	height: 20vh;
+	border: 10px solid HotPink;
+}
