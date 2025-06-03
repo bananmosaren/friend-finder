@@ -4,9 +4,10 @@ body {
 }
 
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+	grid-template-rows: auto;
 }
 
 #connection {
@@ -26,9 +27,26 @@ body {
 	color: Blue;
 }
 
-#videoElement {
+#cam {
 	display: flex;
 	justify-self: right;
 	height: 20vh;
 	border: 10px solid HotPink;
+}
+
+@media (max-width: 800px) {
+	.container {
+		display: block;
+	}
+	
+	body {
+		text-align: center;
+		margin: 0px;
+		padding: 0px;
+		line-height: 30px;
+	}
+	
+	#cam {
+		margin: auto;
+	}
 }
