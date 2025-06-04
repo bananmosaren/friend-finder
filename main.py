@@ -4,7 +4,15 @@ app = flask.Flask(__name__)
 
 @app.route("/")
 def home():
-    ip = flask.request.headers.get('X-Forwarded-For')
+    x = flask.request.headers.get('X-Forwarded-For')
+    if x:
+        if "," in x:
+            ips = x.split(",")
+            ip = ips[0]
+        else:
+            ip = x
+    else:
+        ip = "unknown"
     return flask.render_template("index.html", ip=ip)
     
 if __name__ == "__main__":
