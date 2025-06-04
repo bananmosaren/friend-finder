@@ -1,6 +1,11 @@
 import flask
+from flask_session import Session
+import json
+import uuid
 
 app = flask.Flask(__name__)
+
+locations = []
 
 @app.route("/")
 def home():
@@ -13,7 +18,33 @@ def home():
             ip = x
     else:
         ip = "unknown"
-    return flask.render_template("index.html", ip=ip)
+    print(locations)
+    return flask.render_template("index.html", ip=ip, locations=locations)
+    
+@app.route("/submit/location", methods=['POST'])
+def user_location():
+    data = flask.request.get_json()
+    lat = data['lat']
+    lng = data['lng']
+    
+    current_location = {
+        'user_id': str(uuid.uuid4()),
+        'latitude': lat,
+        'longitude': lng
+    }
+    
+    locations.append(current_location)
+    
+    response = {
+        'message': 'Location received',
+        'latitude': lat,
+        'longitude': lng
+    }
+    return flask.jsonify(locations), 200
+    
+@app.route("/current_locations")
+def get_locations():
+    return locations, 200
     
 if __name__ == "__main__":
     app.run()

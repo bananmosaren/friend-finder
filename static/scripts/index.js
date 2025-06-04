@@ -3,9 +3,9 @@ var video = document.querySelector("#cam");
 if (navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices.getUserMedia({ video: true })
     .then(function (stream) {
-      video.srcObject = stream;
+		video.srcObject = stream;
     })
-    .catch(function (err0r) {
-      console.log("Something went wrong!");
+    .catch(function (error) {
+      console.error("Something went wrong: ", error);
     });
 }
