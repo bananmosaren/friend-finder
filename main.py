@@ -1,5 +1,4 @@
 import flask
-from flask_session import Session
 import json
 import uuid
 
