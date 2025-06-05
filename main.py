@@ -35,8 +35,8 @@ def user_location():
     
     current_location = {
         'user_id': user_id,
-        'latitude': lat,
-        'longitude': lng
+        'lat': lat,
+        'lng': lng
     }
     
     for i in range(len(locations)):
@@ -48,8 +48,8 @@ def user_location():
     
     response = {
         'message': 'Location received',
-        'latitude': lat,
-        'longitude': lng
+        'lat': lat,
+        'lng': lng
     }
     return flask.jsonify(locations), 200
     

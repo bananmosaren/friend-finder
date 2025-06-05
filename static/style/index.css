@@ -1,4 +1,10 @@
-body {
+#map { 
+	height: 70%;
+}
+
+html, body {
+	height: 100%;
+	margin: 0px;
 	background-color: #181a1b;
 	color: MistyRose;
 }
