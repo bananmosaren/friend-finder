@@ -51,7 +51,7 @@ navigator.geolocation.getCurrentPosition(
 			body: JSON.stringify({ lat: lat, lng: lng })
 		})
 		.then(response => response.json())
-		.then(data => console.log(data))
+		// .then(data => console.log(data))
 		.catch(error => console.error('Error fetching : ', error));
 	},
 	function(error) {
@@ -69,17 +69,38 @@ function getLocations() {
 		})
 		.then(data => {
 			locations = data;
-			console.log(data);
+			// console.log(data);
 			
 			locations.forEach(item => {
-				console.log(`user_id: ${item.id}, lat: ${item.latitude}, lng: ${item.longitude}`);
-				const marker = new maplibregl.Marker()
-					.setLngLat([item.longitude, item.latitude])
-					.addTo(map);
-					console.log("new marker")
+				// console.log(`user_id: ${item.user_id}, lat: ${item.latitude}, lng: ${item.longitude}`);
+				const userId = (document.cookie
+					.split('; ')
+					.find(row => row.startsWith('user_id=')) || '')
+					.split('=')[1];
+				// console.log("user_id in locations: ", item.id, "user_id in cookies: ", userId)
+				if (item.user_id !== userId) {
+					var color = randomColor();
+					// console.log(color)
+					const marker = new maplibregl.Marker( {
+						color: color,
+					})
+						.setLngLat([item.longitude, item.latitude])
+						.addTo(map);
+						// console.log("new marker")
+				}
 			})
 		})
 		.catch(error => console.error('Error fetching: ', error));
+}
+
+function randomColor() {
+	var characters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E","F"];
+	var color = "#";
+	
+	for (let i = 0; i < 6; i++) {
+		var color = color + characters[(Math.random() * characters.length) | 0]
+	}
+	return color;
 }
 
 getLocations();
