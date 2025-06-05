@@ -23,18 +23,23 @@ function trackUser(pos) {
 	.catch(error => console.error('Error fetching : ', error));
 	
 	var marker = L.marker([lat, lng])
+		 .bindPopup(`<a href="https://www.google.com" target="_blank">Go to Google</a>`)
 		.addTo(map);
+	marker.on('click', function(e){
+		map.setView([e.latlng.lat, e.latlng.lng], 15);
+	});
 }
 
 navigator.geolocation.watchPosition(trackUser, (err) => {
 	if (err.code === 1) {
 		console.error("Please allow geolocation access");
+		alert("Please allow geolocation access");
 	} else {
 		console.error("Cannot get current location: " + err.message);
 	}
 }, {
 	enableHighAccuracy: true,
-	timeout: 5000,
+	timeout: 15000,
 	maximumAge: 2000
 });
 
@@ -78,12 +83,14 @@ function getLocations() {
 					const randomIcon = icons[Math.floor(Math.random() * icons.length)];
 					console.log(randomIcon)
 					var marker = L.marker([item.lat, item.lng], { icon: randomIcon })
-						.addTo(map);
-						// console.log("new marker")
+						.bindPopup()
+						.addTo(map)
 				}
 			})
 		})
 		.catch(error => console.error('Error fetching: ', error));
 }
+
+
 
 getLocations();
