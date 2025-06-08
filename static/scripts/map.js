@@ -1,5 +1,5 @@
 var map = L.map('map')
-	.setView([51.505, -0.09], 13);
+	.setView([59.33258, 18.0649], 6);
 	
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -23,7 +23,6 @@ function trackUser(pos) {
 	.catch(error => console.error('Error fetching : ', error));
 	
 	var marker = L.marker([lat, lng])
-		 .bindPopup(`<a href="https://www.google.com" target="_blank">Go to Google</a>`)
 		.addTo(map);
 	marker.on('click', function(e){
 		map.setView([e.latlng.lat, e.latlng.lng], 15);
@@ -83,7 +82,7 @@ function getLocations() {
 					const randomIcon = icons[Math.floor(Math.random() * icons.length)];
 					console.log(randomIcon)
 					var marker = L.marker([item.lat, item.lng], { icon: randomIcon })
-						.bindPopup()
+						.bindPopup(`<a href="/user/` + item.user_id + `" target="_blank">Potential friend!</a>`)
 						.addTo(map)
 				}
 			})

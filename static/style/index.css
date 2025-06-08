@@ -33,7 +33,7 @@ html, body {
 	color: Blue;
 }
 
-#cam {
+#photo {
 	display: flex;
 	justify-self: right;
 	height: 20vh;

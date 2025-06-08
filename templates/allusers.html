@@ -1,0 +1,21 @@
+<!DOCTYPE 	HTML>
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+	{% for user in users %}
+	
+		<div>
+			<p>{{ user[0] }}</p>
+			<img src={{ user[1] }} alt="Din webbläsare suger!" />
+		</div>
+	
+	{% endfor %}
+
+</body>
+
+</html>
