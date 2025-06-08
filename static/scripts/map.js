@@ -22,6 +22,7 @@ function trackUser(pos) {
 	// .then(data => console.log(data))
 	.catch(error => console.error('Error fetching : ', error));
 	
+	clearMarkers();
 	var marker = L.marker([lat, lng])
 		.addTo(map);
 	marker.on('click', function(e){
@@ -38,7 +39,7 @@ navigator.geolocation.watchPosition(trackUser, (err) => {
 	}
 }, {
 	enableHighAccuracy: true,
-	timeout: 15000,
+	// timeout: 15000,
 	maximumAge: 2000
 });
 
@@ -90,6 +91,12 @@ function getLocations() {
 		.catch(error => console.error('Error fetching: ', error));
 }
 
-
+function clearMarkers() {
+	map.eachLayer(function(layer) {
+		if (layer instanceof L.Marker) {
+			map.removeLayer(layer);
+		}
+	});
+}
 
 getLocations();

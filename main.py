@@ -73,7 +73,7 @@ def cleanup():
                 del locations[i]
                 
 cleanup_thread = threading.Thread(target=cleanup, daemon=True)
-# cleanup_thread.start()
+cleanup_thread.start()
 
 @app.route("/submit/pfp", methods=['POST'])
 def submit_pfp():
