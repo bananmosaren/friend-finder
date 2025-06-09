@@ -6,6 +6,10 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
+let userMarkers = [];
+let friendMarkers = [];
+let friendIcons = {};
+
 function trackUser(pos) {
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
@@ -22,9 +26,10 @@ function trackUser(pos) {
 	// .then(data => console.log(data))
 	.catch(error => console.error('Error fetching : ', error));
 	
-	clearMarkers();
+	clearUserMarkers();
 	var marker = L.marker([lat, lng])
 		.addTo(map);
+		userMarkers.push(marker);
 	marker.on('click', function(e){
 		map.setView([e.latlng.lat, e.latlng.lng], 15);
 	});
@@ -69,34 +74,46 @@ function getLocations() {
 			return response.json();
 		})
 		.then(data => {
-			locations = data;
 			// console.log(data);
+			clearFriendMarkers();
 			
-			locations.forEach(item => {
-				// console.log(`user_id: ${item.user_id}, lat: ${item.lat}, lng: ${item.lng}`);
+			data.forEach(item => {
+				console.log(`user_id: ${item.user_id}, lat: ${item.lat}, lng: ${item.lng}`);
 				const userId = (document.cookie
 					.split('; ')
 					.find(row => row.startsWith('user_id=')) || '')
 					.split('=')[1];
-				// console.log("user_id in locations: ", item.id, "user_id in cookies: ", userId)
+				// console.log("user_id in data: ", item.id, "user_id in cookies: ", userId)
 				if (item.user_id !== userId) {
-					const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-					console.log(randomIcon)
-					var marker = L.marker([item.lat, item.lng], { icon: randomIcon })
+					if (!friendIcons[item.user_id]) {
+						friendIcons[item.user_id] = icons[Math.floor(Math.random() * icons.length)];
+					}
+					const icon = friendIcons[item.user_id];
+					
+					// console.log(icon)
+					// console.log(friendMarkers)
+					var marker = L.marker([item.lat, item.lng], { icon: icon })
 						.bindPopup(`<a href="/user/` + item.user_id + `" target="_blank">Potential friend!</a>`)
 						.addTo(map)
+						friendMarkers.push(marker);
 				}
 			})
 		})
 		.catch(error => console.error('Error fetching: ', error));
 }
 
-function clearMarkers() {
-	map.eachLayer(function(layer) {
-		if (layer instanceof L.Marker) {
-			map.removeLayer(layer);
-		}
+function clearUserMarkers() {
+	userMarkers.forEach(marker => {
+		map.removeLayer(marker);
 	});
+	userMarkers = [];
 }
 
-getLocations();
+function clearFriendMarkers() {
+	friendMarkers.forEach(marker => {
+		map.removeLayer(marker);
+	});
+	friendMarkers = [];
+}
+
+setInterval(getLocations, 5000);

@@ -66,10 +66,10 @@ def get_locations():
 def cleanup():
     global locations
     while True:
-        sleep(10)
+        sleep(5)
         for i in range(len(locations) - 1, -1, -1):
             timestamp = locations[i]['timestamp']
-            if datetime.datetime.now().timestamp() - timestamp > 30:
+            if datetime.datetime.now().timestamp() - timestamp > 5:
                 del locations[i]
                 
 cleanup_thread = threading.Thread(target=cleanup, daemon=True)
