@@ -1,0 +1,54 @@
+html, body {
+	height: 100%;
+	margin: 0px;
+	background-color: #181a1b;
+	color: MistyRose;
+}
+
+.container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+	grid-template-rows: auto;
+}
+
+#connection {
+	display: flex;
+	flex-direction: column;
+	justify-self: left;
+}
+
+#brand {
+	display: flex;
+	flex-direction: column;
+	justify-self: center;
+	text-align: center;
+}
+
+#brand h1 {
+	color: Blue;
+}
+
+#photo {
+	display: flex;
+	justify-self: right;
+	height: 20vh;
+	border: 10px solid HotPink;
+}
+
+@media (max-width: 800px) {
+	.container {
+		display: block;
+	}
+	
+	body {
+		text-align: center;
+		margin: 0px;
+		padding: 0px;
+		line-height: 30px;
+	}
+	
+	#photo {
+		margin: auto;
+	}
+}
