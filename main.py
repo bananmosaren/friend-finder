@@ -63,17 +63,17 @@ def submit_location():
 def get_locations():
     return flask.jsonify(locations), 200
     
+@app.route('/cleanup', methods=['POST'])
 def cleanup():
+    print("cleanup")
     global locations
-    while True:
-        sleep(5)
-        for i in range(len(locations) - 1, -1, -1):
-            timestamp = locations[i]['timestamp']
-            if datetime.datetime.now().timestamp() - timestamp > 5:
-                del locations[i]
-                
-cleanup_thread = threading.Thread(target=cleanup, daemon=True)
-cleanup_thread.start()
+    id = flask.request.cookies.get('user_id')
+    for i in range(len(locations) - 1, -1, -1):
+        user_id = locations[i]['user_id']
+        if user_id == id:
+            del locations[i]
+            
+    return flask.jsonify(success=True)
 
 @app.route("/submit/pfp", methods=['POST'])
 def submit_pfp():
@@ -82,7 +82,7 @@ def submit_pfp():
     
     image.save(os.path.join('static/media/pfp', user_id + '.jpg'))
     
-    return 'Success!', 200
+    return flask.jsonify(success=True)
 
 @app.route("/user/<user_id>")
 def user(user_id):

@@ -48,6 +48,16 @@ navigator.geolocation.watchPosition(trackUser, (err) => {
 	maximumAge: 2000
 });
 
+window.addEventListener('beforeunload', function() {
+	fetch('/cleanup', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		keepalive: true
+	});
+});
+
 var LeafIcon = L.Icon.extend({
 	options: {
 		shadowUrl: 'static/media/leaf-shadow.png',
