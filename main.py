@@ -9,6 +9,8 @@ import os
 app = flask.Flask(__name__)
 
 locations = []
+users = []
+likes = []
 
 @app.route("/")
 def home():
@@ -63,6 +65,14 @@ def submit_location():
 def get_locations():
     return flask.jsonify(locations), 200
     
+@app.route("/current_users")
+def get_users():
+    return flask.jsonify(users), 200
+    
+@app.route("/current_likes")
+def get_likes():
+    return flask.jsonify(likes), 200
+    
 @app.route('/cleanup', methods=['POST'])
 def cleanup():
     print("cleanup")
@@ -83,6 +93,24 @@ def submit_pfp():
     image.save(os.path.join('static/media/pfp', user_id + '.jpg'))
     
     return flask.jsonify(success=True)
+    
+@app.route("/alias/submit", methods=['POST'])
+def alias_submit():
+    alias = flask.request.form['alias']
+    user_id = flask.request.cookies.get('user_id')
+    
+    user = {
+        'user_id': user_id,
+        'alias': alias
+    }
+    
+    for i in range(len(users) - 1, -1, -1):
+        if users[i]['user_id'] == user_id:
+            del users[i]
+            
+    users.append(user)
+    
+    return flask.redirect(flask.url_for('home'))
 
 @app.route("/user/<user_id>")
 def user(user_id):
@@ -91,12 +119,33 @@ def user(user_id):
     pfp_path = "/static/media/pfp/" + user_id + ".jpg"
     
     if locations:
-        print("locations")
         for i in range(len(locations) - 1, -1, -1):
             if locations[i]['user_id'] == user_id:
+                
+                if users:
+                    for i in range(len(users) - 1, -1, -1):
+                        if users[i]['user_id'] == user_id:
+                            alias = users[i]['alias']
+                            return flask.render_template("user.html", user_id=user_id, pfp_path=pfp_path, alias=alias)
+                
                 return flask.render_template("user.html", user_id=user_id, pfp_path=pfp_path)
     
     return 'No user with  the ID: ' + user_id, 400
+    
+@app.route("/like/submit/<user_id>", methods=['POST'])
+def like(user_id):
+    id = flask.request.cookies.get('user_id')
+    like = {
+        'user_id': user_id,
+        id: True
+    }
+    likes.append(like)
+    
+    return flask.redirect("/user/" + user_id)
+    
+def match(id):
+    user_id = flask.request.cookies.get('user_id')
+    
     
 @app.route("/allusers")
 def all_users():

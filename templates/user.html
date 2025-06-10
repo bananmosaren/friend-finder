@@ -9,7 +9,6 @@
 	<link rel="icon" type="image/x-icon" href="static/media/favicon.ico">
 
 	<link rel='stylesheet' href='/static/style/all.css' />
-	<link rel='stylesheet' href='/static/style/index.css' />
 	<link rel='stylesheet' href='/static/style/user.css' />
 	
 	<script src="/static/scripts/map.js"></script>
@@ -17,26 +16,19 @@
 </head>
 
 <body>
-
-	<header>
-		<div class="container">
-			<div id="connection">
-				<h2>Connected from:</h2>
-				<h3 id="ip">{{ ip }}</h3>
-			</div>
-			<div id="brand">
-				<h1>Friend Finder Map</h1>
-				<p>The best site ever for finding new friends on the internet!</p>
-			</div>
-			<img id="photo"></img>
-			<script src="/static/scripts/index.js"></script>
-		</div>
-	</header>
-
+	
+	{% if alias %}
+		<h1>{{ alias }}</h1>
+	{% endif %}
+	
 	<p id="id">{{ user_id }}</p>
-
+	
+	<form action="/like/submit/{{ user_id }}" method="post" enctype="multipart/form-data">
+		<input type="submit" value="Like" />
+	</form>
+	
 	<img src={{ pfp_path }} alt="Din webbläsare suger!" />
-
+	
 </body>
 
 </html>

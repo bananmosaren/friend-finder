@@ -3,9 +3,9 @@
 <head>
     <title>Friend Finder</title>
     <meta property="og:description" content="The best site ever for finding new friends on the internet!" />
-    <meta charset='utf-8'>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/x-icon" href="static/media/favicon.ico">
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="icon" type="image/x-icon" href="static/media/favicon.ico" />
 	
 	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -30,7 +30,13 @@
 				<h1>Friend Finder Map</h1>
 				<p>The best site ever for finding new friends on the internet!</p>
 			</div>
-			<img id="photo"></img>
+			<div>
+				<form action="/alias/submit" method="post" enctype="multipart/form-data">
+					<input type="text" name="alias" placeholder="Nickname..." required />
+					<input type="submit" value="Submit" />
+				</form>
+			</div>
+			<img id="photo" />
 			<script src="static/scripts/index.js"></script>
 		</div>
 	</header>
